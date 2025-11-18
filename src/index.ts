@@ -75,33 +75,24 @@ async function main() {
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 
-    // Request logging middleware
+    // Serve static files from public directory
+    const publicPath = path.join(__dirname, '../public');
+    app.use(express.static(publicPath));
+    logger.info(`Serving static files from: ${publicPath}`);
+
+    // Request logging middleware (skip for static files)
     app.use((req, res, next) => {
-      logger.info(`${req.method} ${req.path}`, {
-        ip: req.ip,
-        userAgent: req.get('user-agent')
-      });
+      if (!req.path.startsWith('/css') && !req.path.startsWith('/js') && !req.path.startsWith('/images')) {
+        logger.info(`${req.method} ${req.path}`, {
+          ip: req.ip,
+          userAgent: req.get('user-agent')
+        });
+      }
       next();
     });
 
-    // Routes
+    // API Routes
     app.use('/api', createRouter(integrationService));
-
-    // Root endpoint
-    app.get('/', (req, res) => {
-      res.json({
-        name: 'SAP Business One Email & SMS Sender',
-        version: '1.0.0',
-        status: 'running',
-        endpoints: {
-          health: 'GET /api/health',
-          sendEmail: 'POST /api/email',
-          sendSMS: 'POST /api/sms',
-          documentNotification: 'POST /api/document-notification',
-          bulkNotifications: 'POST /api/bulk-notifications'
-        }
-      });
-    });
 
     // Error handling middleware
     app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -116,8 +107,12 @@ async function main() {
     const server = app.listen(appConfig.port, () => {
       logger.info(`Server running on port ${appConfig.port}`);
       logger.info(`Environment: ${appConfig.nodeEnv}`);
+      logger.info('');
+      logger.info('='.repeat(60));
+      logger.info(`🌐 Web Interface: http://localhost:${appConfig.port}/`);
+      logger.info('='.repeat(60));
+      logger.info('');
       logger.info('API endpoints available:');
-      logger.info(`  - GET  http://localhost:${appConfig.port}/`);
       logger.info(`  - GET  http://localhost:${appConfig.port}/api/health`);
       logger.info(`  - POST http://localhost:${appConfig.port}/api/email`);
       logger.info(`  - POST http://localhost:${appConfig.port}/api/sms`);

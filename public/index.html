@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAP B1 Email & SMS Sender</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📧 SAP Business One - Email & SMS Sender</h1>
+            <p class="subtitle">Sistema de Notificaciones Integrado</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-button active" data-tab="email">Enviar Email</button>
+            <button class="tab-button" data-tab="sms">Enviar SMS</button>
+            <button class="tab-button" data-tab="document">Notificación de Documento</button>
+            <button class="tab-button" data-tab="bulk">Envío Masivo</button>
+            <button class="tab-button" data-tab="history">Historial</button>
+        </nav>
+
+        <!-- Email Tab -->
+        <div id="email-tab" class="tab-content active">
+            <div class="card">
+                <h2>Enviar Email</h2>
+                <form id="email-form">
+                    <div class="form-group">
+                        <label>Tipo de Destinatario:</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="email-recipient-type" value="bp" checked>
+                                Business Partner
+                            </label>
+                            <label>
+                                <input type="radio" name="email-recipient-type" value="email">
+                                Email Directo
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="email-bp-group">
+                        <label for="email-bp-code">Código Business Partner:</label>
+                        <input type="text" id="email-bp-code" placeholder="Ej: C00001">
+                    </div>
+
+                    <div class="form-group" id="email-direct-group" style="display: none;">
+                        <label for="email-to">Email Destinatario:</label>
+                        <input type="email" id="email-to" placeholder="customer@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email-subject">Asunto: *</label>
+                        <input type="text" id="email-subject" placeholder="Asunto del email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Formato del Mensaje:</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="email-format" value="text" checked>
+                                Texto Plano
+                            </label>
+                            <label>
+                                <input type="radio" name="email-format" value="html">
+                                HTML
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="email-text-group">
+                        <label for="email-text">Mensaje:</label>
+                        <textarea id="email-text" rows="6" placeholder="Escribe tu mensaje aquí..."></textarea>
+                    </div>
+
+                    <div class="form-group" id="email-html-group" style="display: none;">
+                        <label for="email-html">Contenido HTML:</label>
+                        <textarea id="email-html" rows="6" placeholder="<p>Tu contenido HTML aquí...</p>"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Enviar Email</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- SMS Tab -->
+        <div id="sms-tab" class="tab-content">
+            <div class="card">
+                <h2>Enviar SMS</h2>
+                <form id="sms-form">
+                    <div class="form-group">
+                        <label>Tipo de Destinatario:</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="sms-recipient-type" value="bp" checked>
+                                Business Partner
+                            </label>
+                            <label>
+                                <input type="radio" name="sms-recipient-type" value="phone">
+                                Teléfono Directo
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="sms-bp-group">
+                        <label for="sms-bp-code">Código Business Partner:</label>
+                        <input type="text" id="sms-bp-code" placeholder="Ej: C00001">
+                    </div>
+
+                    <div class="form-group" id="sms-direct-group" style="display: none;">
+                        <label for="sms-to">Número de Teléfono:</label>
+                        <input type="tel" id="sms-to" placeholder="+1234567890">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sms-message">Mensaje: * <span class="char-count" id="sms-char-count">0/160</span></label>
+                        <textarea id="sms-message" rows="4" maxlength="160" placeholder="Escribe tu mensaje SMS (máx 160 caracteres)" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Enviar SMS</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Document Notification Tab -->
+        <div id="document-tab" class="tab-content">
+            <div class="card">
+                <h2>Notificación de Documento SAP</h2>
+                <form id="document-form">
+                    <div class="form-group">
+                        <label for="doc-bp-code">Código Business Partner: *</label>
+                        <input type="text" id="doc-bp-code" placeholder="Ej: C00001" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="doc-type">Tipo de Documento: *</label>
+                        <select id="doc-type" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="Invoice">Factura (Invoice)</option>
+                            <option value="Order">Orden (Order)</option>
+                            <option value="Quotation">Cotización (Quotation)</option>
+                            <option value="DeliveryNote">Nota de Entrega (DeliveryNote)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="doc-number">Número de Documento (DocEntry): *</label>
+                        <input type="number" id="doc-number" placeholder="123" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Canales de Notificación:</label>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" id="doc-include-email" checked>
+                                Enviar Email
+                            </label>
+                            <label>
+                                <input type="checkbox" id="doc-include-sms" checked>
+                                Enviar SMS
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Enviar Notificación</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Bulk Notifications Tab -->
+        <div id="bulk-tab" class="tab-content">
+            <div class="card">
+                <h2>Envío Masivo de Notificaciones</h2>
+                <form id="bulk-form">
+                    <div class="form-group">
+                        <label for="bulk-bp-codes">Códigos Business Partner: *</label>
+                        <textarea id="bulk-bp-codes" rows="4" placeholder="C00001, C00002, C00003 (separados por comas)" required></textarea>
+                        <small>Ingresa los códigos separados por comas</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bulk-subject">Asunto: *</label>
+                        <input type="text" id="bulk-subject" placeholder="Asunto del mensaje" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bulk-message">Mensaje: *</label>
+                        <textarea id="bulk-message" rows="6" placeholder="Escribe tu mensaje aquí..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Canales de Envío:</label>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" id="bulk-include-email" checked>
+                                Enviar Email
+                            </label>
+                            <label>
+                                <input type="checkbox" id="bulk-include-sms">
+                                Enviar SMS
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Enviar a Todos</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- History Tab -->
+        <div id="history-tab" class="tab-content">
+            <div class="card">
+                <h2>Historial de Envíos</h2>
+                <div class="history-controls">
+                    <button class="btn btn-secondary" onclick="clearHistory()">Limpiar Historial</button>
+                </div>
+                <div id="history-list" class="history-list">
+                    <p class="no-history">No hay envíos registrados aún.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Area -->
+        <div id="notification-area"></div>
+    </div>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>

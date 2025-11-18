@@ -4,12 +4,14 @@ A comprehensive integration service for SAP Business One that enables automated 
 
 ## Features
 
+- **🌐 Interfaz Web Completa**: Aplicación web moderna y fácil de usar, no requiere conocimientos técnicos
 - **SAP Business One Integration**: Connect to SAP B1 Service Layer to retrieve business partner and document information
 - **Email Notifications**: Send professional HTML-formatted emails with customizable templates
 - **SMS Notifications**: Send SMS messages via Twilio integration
 - **Document Notifications**: Automatically send notifications for invoices, orders, quotations, and delivery notes
 - **Bulk Messaging**: Send notifications to multiple business partners at once
 - **RESTful API**: Easy-to-use REST API for integration with other systems
+- **📊 Historial de Envíos**: Seguimiento completo de todas las notificaciones enviadas
 - **Logging**: Comprehensive logging with Winston for debugging and monitoring
 - **Type Safety**: Built with TypeScript for better code quality and maintainability
 
@@ -77,6 +79,22 @@ npm run dev
 npm run build
 npm start
 ```
+
+### Acceder a la Interfaz Web
+
+Una vez iniciado el servidor, abre tu navegador y ve a:
+```
+http://localhost:3000/
+```
+
+La interfaz web incluye:
+- 📧 **Enviar Email**: Formulario para enviar emails individuales
+- 📱 **Enviar SMS**: Formulario para enviar SMS individuales
+- 📄 **Notificación de Documento**: Enviar notificaciones automáticas de documentos SAP
+- 📨 **Envío Masivo**: Enviar notificaciones a múltiples Business Partners
+- 📊 **Historial**: Ver el historial de todos los envíos realizados
+
+La interfaz es totalmente funcional y no requiere usar comandos curl ni herramientas externas.
 
 ## API Endpoints
 
